@@ -2,29 +2,30 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using TodoApi.Models;
 using TodoApi.Repositories;
+using System;
 
 namespace TodoApi.Controllers
 {
     [Route("api/[controller]")]
     public class TodoController : Controller
     {
-        private ITodoRepository _todoItems;
+        private ITodoRepository _todoRepository;
         
-        public TodoController(ITodoRepository todoItems)
+        public TodoController(ITodoRepository todoRepository)
         {
-            _todoItems = todoItems;
+            _todoRepository = todoRepository;
         }
 
         [HttpGet]
         public IEnumerable<TodoItem> GetAll()
         {
-            return _todoItems.GetAll();
+            return _todoRepository.GetAll();
         }
 
         [HttpGet("{id}", Name = "GetTodo")]
         public IActionResult GetById(int id)
         {
-            var item = _todoItems.Find(id);
+            var item = _todoRepository.Find(id);
             if (item == null)
             {
                 return NotFound();
@@ -39,7 +40,7 @@ namespace TodoApi.Controllers
             {
                 return BadRequest();
             }
-            _todoItems.Add(item);
+            _todoRepository.Add(item);
             return CreatedAtAction("GetTodo", new { id = item.Id }, item);
         }
 
@@ -51,20 +52,20 @@ namespace TodoApi.Controllers
                 return BadRequest();
             }
 
-            var todo = _todoItems.Find(id);
+            var todo = _todoRepository.Find(id);
             if (todo == null)
             {
                 return NotFound();
             }
 
-            _todoItems.Update(item);
+            _todoRepository.Update(item);
             return new NoContentResult();
         }
 
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            _todoItems.Remove(id);
+            _todoRepository.Remove(id);
         }
     }
 }
