@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Hosting;
 
-namespace todo
+namespace TodoApi
 {
     public class Program
     {

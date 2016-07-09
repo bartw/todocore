@@ -1,18 +1,29 @@
-using System;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using TodoApi.Repositories;
 
-namespace todo
+namespace TodoApi
 {
     public class Startup
     {
-        public void Configure(IApplicationBuilder app)
+        public void ConfigureServices(IServiceCollection services)
         {
-            app.Run(context =>
-            {
-                return context.Response.WriteAsync("Hello from ASP.NET Core!");
-            });
+            // Add framework services.
+            services.AddMvc();
+
+            services.AddLogging();
+
+            // Add our repository type
+            services.AddSingleton<ITodoRepository, TodoRepository>();
+        }
+        
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            app.UseMvcWithDefaultRoute();
         }
     }
 }
