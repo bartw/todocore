@@ -16,7 +16,6 @@ namespace TodoApi.Repositories
         {
             using (var db = new TodoContext())
             {
-                Console.WriteLine(db.TodoItems.Count().ToString());
                 return db.TodoItems.ToList();
             }
         }
